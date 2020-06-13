@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gxuwz.medical.mapper.TInstitutionMapper">
+    
+    <resultMap type="com.gxuwz.medical.domain.TInstitution" id="TInstitutionResult">
+        <result property="agencode"    column="agencode"    />
+        <result property="areacode"    column="areacode"    />
+        <result property="agenname"    column="agenname"    />
+        <result property="grade"    column="grade"    />
+    </resultMap>
+
+    <sql id="selectTInstitutionVo">
+        select agencode, areacode, agenname, grade from t_institution
+    </sql>
+
+    <select id="selectTInstitutionList" parameterType="com.gxuwz.medical.domain.TInstitution" resultMap="TInstitutionResult">
+        <include refid="selectTInstitutionVo"/>
+        <where>  
+            <if test="areacode != null  and areacode != ''"> and areacode = #{areacode}</if>
+            <if test="agenname != null  and agenname != ''"> and agenname like concat('%', #{agenname}, '%')</if>
+            <if test="grade != null "> and grade = #{grade}</if>
+        </where>
+    </select>
+    
+    <select id="selectTInstitutionById" parameterType="String" resultMap="TInstitutionResult">
+        <include refid="selectTInstitutionVo"/>
+        where agencode = #{agencode}
+    </select>
+        
+    <insert id="insertTInstitution" parameterType="com.gxuwz.medical.domain.TInstitution">
+        insert into t_institution
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="agencode != null  and agencode != ''">agencode,</if>
+            <if test="areacode != null  and areacode != ''">areacode,</if>
+            <if test="agenname != null  and agenname != ''">agenname,</if>
+            <if test="grade != null ">grade,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="agencode != null  and agencode != ''">#{agencode},</if>
+            <if test="areacode != null  and areacode != ''">#{areacode},</if>
+            <if test="agenname != null  and agenname != ''">#{agenname},</if>
+            <if test="grade != null ">#{grade},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTInstitution" parameterType="com.gxuwz.medical.domain.TInstitution">
+        update t_institution
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="areacode != null  and areacode != ''">areacode = #{areacode},</if>
+            <if test="agenname != null  and agenname != ''">agenname = #{agenname},</if>
+            <if test="grade != null ">grade = #{grade},</if>
+        </trim>
+        where agencode = #{agencode}
+    </update>
+
+    <delete id="deleteTInstitutionById" parameterType="String">
+        delete from t_institution where agencode = #{agencode}
+    </delete>
+
+    <delete id="deleteTInstitutionByIds" parameterType="String">
+        delete from t_institution where agencode in 
+        <foreach item="agencode" collection="array" open="(" separator="," close=")">
+            #{agencode}
+        </foreach>
+    </delete>
+    
+</mapper>

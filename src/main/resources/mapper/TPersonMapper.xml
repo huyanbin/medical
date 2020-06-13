@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gxuwz.medical.mapper.TPersonMapper">
+    
+    <resultMap type="com.gxuwz.medical.domain.TPerson" id="TPersonResult">
+        <result property="perscode"    column="perscode"    />
+        <result property="famicode"    column="famicode"    />
+        <result property="ruralCard"    column="rural_card"    />
+        <result property="mediCard"    column="medi_card"    />
+        <result property="houseNum"    column="house_num"    />
+        <result property="persname"    column="persname"    />
+        <result property="relation"    column="relation"    />
+        <result property="cardId"    column="card_id"    />
+        <result property="sex"    column="sex"    />
+        <result property="stateHealth"    column="state_health"    />
+        <result property="birthday"    column="birthday"    />
+        <result property="isRural"    column="is_rural"    />
+        <result property="occupation"    column="occupation"    />
+        <result property="telephone"    column="telephone"    />
+    </resultMap>
+
+    <sql id="selectTPersonVo">
+        select perscode, famicode, rural_card, medi_card, house_num, persname, relation, card_id, sex, state_health, birthday, is_rural, occupation, telephone from t_person
+    </sql>
+
+    <select id="selectTPersonList" parameterType="com.gxuwz.medical.domain.TPerson" resultMap="TPersonResult">
+        <include refid="selectTPersonVo"/>
+        <where>  
+            <if test="famicode != null  and famicode != ''"> and famicode = #{famicode}</if>
+            <if test="ruralCard != null  and ruralCard != ''"> and rural_card = #{ruralCard}</if>
+            <if test="mediCard != null  and mediCard != ''"> and medi_card = #{mediCard}</if>
+            <if test="houseNum != null  and houseNum != ''"> and house_num = #{houseNum}</if>
+            <if test="persname != null  and persname != ''"> and persname like concat('%', #{persname}, '%')</if>
+            <if test="relation != null  and relation != ''"> and relation = #{relation}</if>
+            <if test="cardId != null  and cardId != ''"> and card_id = #{cardId}</if>
+            <if test="sex != null  and sex != ''"> and sex = #{sex}</if>
+            <if test="stateHealth != null "> and state_health = #{stateHealth}</if>
+            <if test="birthday != null "> and birthday = #{birthday}</if>
+            <if test="isRural != null "> and is_rural = #{isRural}</if>
+            <if test="occupation != null  and occupation != ''"> and occupation = #{occupation}</if>
+            <if test="telephone != null  and telephone != ''"> and telephone = #{telephone}</if>
+        </where>
+    </select>
+    
+    <select id="selectTPersonById" parameterType="String" resultMap="TPersonResult">
+        <include refid="selectTPersonVo"/>
+        where perscode = #{perscode}
+    </select>
+
+    <select id="selectTPersonByCardId" parameterType="String" resultMap="TPersonResult">
+        <include refid="selectTPersonVo"/>
+        where card_id = #{cardId}
+    </select>
+
+        
+    <insert id="insertTPerson" parameterType="com.gxuwz.medical.domain.TPerson">
+        insert into t_person
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="perscode != null  and perscode != ''">perscode,</if>
+            <if test="famicode != null  and famicode != ''">famicode,</if>
+            <if test="ruralCard != null  and ruralCard != ''">rural_card,</if>
+            <if test="mediCard != null  and mediCard != ''">medi_card,</if>
+            <if test="houseNum != null  and houseNum != ''">house_num,</if>
+            <if test="persname != null  and persname != ''">persname,</if>
+            <if test="relation != null  and relation != ''">relation,</if>
+            <if test="cardId != null  and cardId != ''">card_id,</if>
+            <if test="sex != null  and sex != ''">sex,</if>
+            <if test="stateHealth != null ">state_health,</if>
+            <if test="birthday != null ">birthday,</if>
+            <if test="isRural != null ">is_rural,</if>
+            <if test="occupation != null  and occupation != ''">occupation,</if>
+            <if test="telephone != null  and telephone != ''">telephone,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="perscode != null  and perscode != ''">#{perscode},</if>
+            <if test="famicode != null  and famicode != ''">#{famicode},</if>
+            <if test="ruralCard != null  and ruralCard != ''">#{ruralCard},</if>
+            <if test="mediCard != null  and mediCard != ''">#{mediCard},</if>
+            <if test="houseNum != null  and houseNum != ''">#{houseNum},</if>
+            <if test="persname != null  and persname != ''">#{persname},</if>
+            <if test="relation != null  and relation != ''">#{relation},</if>
+            <if test="cardId != null  and cardId != ''">#{cardId},</if>
+            <if test="sex != null  and sex != ''">#{sex},</if>
+            <if test="stateHealth != null ">#{stateHealth},</if>
+            <if test="birthday != null ">#{birthday},</if>
+            <if test="isRural != null ">#{isRural},</if>
+            <if test="occupation != null  and occupation != ''">#{occupation},</if>
+            <if test="telephone != null  and telephone != ''">#{telephone},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTPerson" parameterType="com.gxuwz.medical.domain.TPerson">
+        update t_person
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="famicode != null  and famicode != ''">famicode = #{famicode},</if>
+            <if test="ruralCard != null  and ruralCard != ''">rural_card = #{ruralCard},</if>
+            <if test="mediCard != null  and mediCard != ''">medi_card = #{mediCard},</if>
+            <if test="houseNum != null  and houseNum != ''">house_num = #{houseNum},</if>
+            <if test="persname != null  and persname != ''">persname = #{persname},</if>
+            <if test="relation != null  and relation != ''">relation = #{relation},</if>
+            <if test="cardId != null  and cardId != ''">card_id = #{cardId},</if>
+            <if test="sex != null  and sex != ''">sex = #{sex},</if>
+            <if test="stateHealth != null ">state_health = #{stateHealth},</if>
+            <if test="birthday != null ">birthday = #{birthday},</if>
+            <if test="isRural != null ">is_rural = #{isRural},</if>
+            <if test="occupation != null  and occupation != ''">occupation = #{occupation},</if>
+            <if test="telephone != null  and telephone != ''">telephone = #{telephone},</if>
+        </trim>
+        where perscode = #{perscode}
+    </update>
+
+    <delete id="deleteTPersonById" parameterType="String">
+        delete from t_person where perscode = #{perscode}
+    </delete>
+
+    <delete id="deleteTPersonByIds" parameterType="String">
+        delete from t_person where perscode in 
+        <foreach item="perscode" collection="array" open="(" separator="," close=")">
+            #{perscode}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gxuwz.medical.mapper.TAreaMapper">
+    
+    <resultMap type="com.gxuwz.medical.domain.TArea" id="TAreaResult">
+        <result property="areacode"    column="areacode"    />
+        <result property="areaname"    column="areaname"    />
+        <result property="grade"    column="grade"    />
+    </resultMap>
+
+    <sql id="selectTAreaVo">
+        select areacode, areaname, grade from t_area
+    </sql>
+
+    <select id="selectTAreaList" parameterType="com.gxuwz.medical.domain.TArea" resultMap="TAreaResult">
+        <include refid="selectTAreaVo"/>
+        <where>  
+            <if test="areaname != null  and areaname != ''"> and areaname like concat('%', #{areaname}, '%')</if>
+            <if test="grade != null  and grade != ''"> and grade = #{grade}</if>
+        </where>
+    </select>
+    
+    <select id="selectTAreaById" parameterType="String" resultMap="TAreaResult">
+        <include refid="selectTAreaVo"/>
+        where areacode = #{areacode}
+    </select>
+        
+    <insert id="insertTArea" parameterType="com.gxuwz.medical.domain.TArea">
+        insert into t_area
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="areacode != null  and areacode != ''">areacode,</if>
+            <if test="areaname != null  and areaname != ''">areaname,</if>
+            <if test="grade != null  and grade != ''">grade,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="areacode != null  and areacode != ''">#{areacode},</if>
+            <if test="areaname != null  and areaname != ''">#{areaname},</if>
+            <if test="grade != null  and grade != ''">#{grade},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTArea" parameterType="com.gxuwz.medical.domain.TArea">
+        update t_area
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="areaname != null  and areaname != ''">areaname = #{areaname},</if>
+            <if test="grade != null  and grade != ''">grade = #{grade},</if>
+        </trim>
+        where areacode = #{areacode}
+    </update>
+
+    <delete id="deleteTAreaById" parameterType="String">
+        delete from t_area where areacode = #{areacode}
+    </delete>
+
+    <delete id="deleteTAreaByIds" parameterType="String">
+        delete from t_area where areacode in 
+        <foreach item="areacode" collection="array" open="(" separator="," close=")">
+            #{areacode}
+        </foreach>
+    </delete>
+    
+</mapper>

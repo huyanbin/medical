@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gxuwz.medical.mapper.TChronicdisMapper">
+    
+    <resultMap type="com.gxuwz.medical.domain.TChronicdis" id="TChronicdisResult">
+        <result property="illcode"    column="illcode"    />
+        <result property="pycode"    column="pycode"    />
+        <result property="illname"    column="illname"    />
+        <result property="wbcode"    column="wbcode"    />
+        <result property="rate"    column="rate"    />
+    </resultMap>
+
+    <sql id="selectTChronicdisVo">
+        select illcode, pycode, illname, wbcode, rate from t_chronicdis
+    </sql>
+
+    <select id="selectTChronicdisList" parameterType="com.gxuwz.medical.domain.TChronicdis" resultMap="TChronicdisResult">
+        <include refid="selectTChronicdisVo"/>
+        <where>  
+            <if test="pycode != null  and pycode != ''"> and pycode = #{pycode}</if>
+            <if test="illname != null  and illname != ''"> and illname like concat('%', #{illname}, '%')</if>
+            <if test="wbcode != null  and wbcode != ''"> and wbcode = #{wbcode}</if>
+            <if test="rate != null "> and rate = #{rate}</if>
+        </where>
+    </select>
+    
+    <select id="selectTChronicdisById" parameterType="String" resultMap="TChronicdisResult">
+        <include refid="selectTChronicdisVo"/>
+        where illcode = #{illcode}
+    </select>
+        
+    <insert id="insertTChronicdis" parameterType="com.gxuwz.medical.domain.TChronicdis">
+        insert into t_chronicdis
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="illcode != null  and illcode != ''">illcode,</if>
+            <if test="pycode != null  and pycode != ''">pycode,</if>
+            <if test="illname != null  and illname != ''">illname,</if>
+            <if test="wbcode != null  and wbcode != ''">wbcode,</if>
+            <if test="rate != null ">rate,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="illcode != null  and illcode != ''">#{illcode},</if>
+            <if test="pycode != null  and pycode != ''">#{pycode},</if>
+            <if test="illname != null  and illname != ''">#{illname},</if>
+            <if test="wbcode != null  and wbcode != ''">#{wbcode},</if>
+            <if test="rate != null ">#{rate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTChronicdis" parameterType="com.gxuwz.medical.domain.TChronicdis">
+        update t_chronicdis
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="pycode != null  and pycode != ''">pycode = #{pycode},</if>
+            <if test="illname != null  and illname != ''">illname = #{illname},</if>
+            <if test="wbcode != null  and wbcode != ''">wbcode = #{wbcode},</if>
+            <if test="rate != null ">rate = #{rate},</if>
+        </trim>
+        where illcode = #{illcode}
+    </update>
+
+    <delete id="deleteTChronicdisById" parameterType="String">
+        delete from t_chronicdis where illcode = #{illcode}
+    </delete>
+
+    <delete id="deleteTChronicdisByIds" parameterType="String">
+        delete from t_chronicdis where illcode in 
+        <foreach item="illcode" collection="array" open="(" separator="," close=")">
+            #{illcode}
+        </foreach>
+    </delete>
+    
+</mapper>

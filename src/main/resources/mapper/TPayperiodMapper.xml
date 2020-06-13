@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gxuwz.medical.mapper.TPayperiodMapper">
+    
+    <resultMap type="com.gxuwz.medical.domain.TPayperiod" id="TPayperiodResult">
+        <result property="runyear"    column="runyear"    />
+        <result property="amount"    column="amount"    />
+        <result property="startime"    column="startime"    />
+        <result property="endtime"    column="endtime"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectTPayperiodVo">
+        select runyear, amount, startime, endtime, status from t_payperiod
+    </sql>
+
+    <select id="selectTPayperiodList" parameterType="com.gxuwz.medical.domain.TPayperiod" resultMap="TPayperiodResult">
+        <include refid="selectTPayperiodVo"/>
+        <where>  
+            <if test="amount != null "> and amount = #{amount}</if>
+            <if test="startime != null  and startime != ''"> and startime = #{startime}</if>
+            <if test="endtime != null  and endtime != ''"> and endtime = #{endtime}</if>
+            <if test="status != null "> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectTPayperiodById" parameterType="Long" resultMap="TPayperiodResult">
+        <include refid="selectTPayperiodVo"/>
+        where runyear = #{runyear}
+    </select>
+        
+    <insert id="insertTPayperiod" parameterType="com.gxuwz.medical.domain.TPayperiod">
+        insert into t_payperiod
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="runyear != null ">runyear,</if>
+            <if test="amount != null ">amount,</if>
+            <if test="startime != null  and startime != ''">startime,</if>
+            <if test="endtime != null  and endtime != ''">endtime,</if>
+            <if test="status != null ">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="runyear != null ">#{runyear},</if>
+            <if test="amount != null ">#{amount},</if>
+            <if test="startime != null  and startime != ''">#{startime},</if>
+            <if test="endtime != null  and endtime != ''">#{endtime},</if>
+            <if test="status != null ">#{status},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTPayperiod" parameterType="com.gxuwz.medical.domain.TPayperiod">
+        update t_payperiod
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="amount != null ">amount = #{amount},</if>
+            <if test="startime != null  and startime != ''">startime = #{startime},</if>
+            <if test="endtime != null  and endtime != ''">endtime = #{endtime},</if>
+            <if test="status != null ">status = #{status},</if>
+        </trim>
+        where runyear = #{runyear}
+    </update>
+
+    <delete id="deleteTPayperiodById" parameterType="Long">
+        delete from t_payperiod where runyear = #{runyear}
+    </delete>
+
+    <delete id="deleteTPayperiodByIds" parameterType="String">
+        delete from t_payperiod where runyear in 
+        <foreach item="runyear" collection="array" open="(" separator="," close=")">
+            #{runyear}
+        </foreach>
+    </delete>
+    
+</mapper>

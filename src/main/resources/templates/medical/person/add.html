@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head> <meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="keywords" content="">
+	<meta name="description" content="">
+	<title>新增人</title>
+	<link rel="shortcut icon" href="favicon.ico">
+	<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+	<link th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
+	<!-- bootstrap-table 表格插件样式 -->
+	<link th:href="@{/ajax/libs/bootstrap-table/bootstrap-table.min.css}" rel="stylesheet"/>
+	<link th:href="@{/css/animate.css}" rel="stylesheet"/>
+	<link th:href="@{/css/style.css}" rel="stylesheet"/>
+	<link th:href="@{/ruoyi/css/ry-ui.css}" rel="stylesheet"/>
+     <link th:href="@{/ajax/libs/datapicker/bootstrap-datetimepicker.css}" rel="stylesheet"/>
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-person-add">
+
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">农合证号：</label>
+                <div class="col-sm-8">
+                    <input name="ruralCard" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">医疗证号：</label>
+                <div class="col-sm-8">
+                    <input name="mediCard" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">户内编号：</label>
+                <div class="col-sm-8">
+                    <input name="houseNum" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">名字：</label>
+                <div class="col-sm-8">
+                    <input name="persname" class="form-control" type="text" th:value="${persname}" >
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">与户主关系：</label>
+                <div class="col-sm-8">
+                    <select name="relation" class="form-control m-b">
+                        <option th:value="0">户主</option>
+                        <option th:value="1">父子</option>
+                        <option th:value="2">母子</option>
+                        <option th:value="3">父女</option>
+                        <option th:value="4">母女</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">身份证：</label>
+                <div class="col-sm-8">
+                    <input name="cardId" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">性别：</label>
+                <div class="col-sm-8">
+                    <select name="sex" class="form-control m-b">
+                        <option th:value="0">男</option>
+                        <option th:value="1">女</option>
+                        <option th:value="3">未知</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">健康状况：</label>
+                <div class="col-sm-8">
+                    <select name="stateHealth" class="form-control m-b">
+                        <option th:value="0">好</option>
+                        <option th:value="1">一般</option>
+                        <option th:value="2">差</option>
+                        <option th:value="3">疾病</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">出生日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="birthday" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">是否农村户口：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box">
+                        <label class="check-box">
+                            <input name="isRural" type="radio" value="0" required>是 </input>
+                        </label>
+                        <label class="check-box">
+                            <input name="isRural" type="radio" value="1">否</input>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">职业类型：</label>
+                <div class="col-sm-8">
+                    <select name="occupation" class="form-control m-b">
+                        <option th:value="打工">打工</option>
+                        <option th:value="老板">老板</option>
+                        <option th:value="务农">务农</option>
+                        <option th:value="游民">游民</option>
+                        <option th:value="肯佬族">肯佬族</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">电话：</label>
+                <div class="col-sm-8">
+                    <input name="telephone" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <script th:src="@{/js/jquery.min.js}"></script>
+	<script th:src="@{/js/bootstrap.min.js}"></script>
+	<!-- bootstrap-table 表格插件 -->
+	<script th:src="@{/ajax/libs/bootstrap-table/bootstrap-table.min.js}"></script>
+	<script th:src="@{/ajax/libs/bootstrap-table/locale/bootstrap-table-zh-CN.min.js}"></script>
+	<script th:src="@{/ajax/libs/bootstrap-table/extensions/mobile/bootstrap-table-mobile.js}"></script>
+	<script th:src="@{/ajax/libs/bootstrap-table/extensions/toolbar/bootstrap-table-toolbar.min.js}"></script>
+	<script th:src="@{/ajax/libs/bootstrap-table/extensions/columns/bootstrap-table-fixed-columns.js}"></script>
+	<!-- jquery-validate 表单验证插件 -->
+	<script th:src="@{/ajax/libs/validate/jquery.validate.min.js}"></script>
+	<script th:src="@{/ajax/libs/validate/messages_zh.min.js}"></script>
+	<script th:src="@{/ajax/libs/validate/jquery.validate.extend.js}"></script>
+	<!-- jquery-validate 表单树插件 -->
+	<script th:src="@{/ajax/libs/bootstrap-treetable/bootstrap-treetable.js}"></script>
+	<!-- jquery-export 表格导出插件 -->
+	<script th:src="@{/ajax/libs/bootstrap-table/extensions/export/bootstrap-table-export.js}"></script>
+	<script th:src="@{/ajax/libs/bootstrap-table/extensions/export/tableExport.js}"></script>
+	<!-- 遮罩层 -->
+	<script th:src="@{/ajax/libs/blockUI/jquery.blockUI.js}"></script>
+	<script th:src="@{/ajax/libs/iCheck/icheck.min.js}"></script>
+	<script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
+	<script th:src="@{/ajax/libs/layui/layui.js}"></script>
+	<script th:src="@{/ruoyi/js/common.js?v=4.1.0}"></script>
+	<script th:src="@{/ruoyi/js/ry-ui.js?v=4.1.0}"></script>
+	<script> var ctx = "\/"; </script>
+    <script th:src="@{/ajax/libs/datapicker/bootstrap-datetimepicker.js}"></script>
+    <script type="text/javascript">
+        var prefix = ctx + "medical/person"
+        $("#form-person-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-person-add').serialize());
+            }
+        }
+
+        $("input[name='birthday']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+    </script>
+</body>
+</html>

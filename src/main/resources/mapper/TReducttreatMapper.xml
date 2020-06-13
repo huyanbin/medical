@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gxuwz.medical.mapper.TReducttreatMapper">
+    
+    <resultMap type="com.gxuwz.medical.domain.TReducttreat" id="TReducttreatResult">
+        <result property="id"    column="id"    />
+        <result property="chronicinfoid"    column="chronicInfoId"    />
+        <result property="treattime"    column="treattime"    />
+        <result property="money"    column="money"    />
+        <result property="hosid"    column="hosId"    />
+        <result property="reductstatus"    column="reductstatus"    />
+        <result property="freemoney"    column="freemoney"    />
+    </resultMap>
+
+    <sql id="selectTReducttreatVo">
+        select id, chronicInfoId, treattime, money, hosId, reductstatus, freemoney from t_reducttreat
+    </sql>
+
+    <select id="selectTReducttreatList" parameterType="com.gxuwz.medical.domain.TReducttreat" resultMap="TReducttreatResult">
+        <include refid="selectTReducttreatVo"/>
+        <where>  
+            <if test="chronicinfoid != null  and chronicinfoid != ''"> and chronicInfoId = #{chronicinfoid}</if>
+            <if test="treattime != null  and treattime != ''"> and treattime = #{treattime}</if>
+            <if test="money != null "> and money = #{money}</if>
+            <if test="hosid != null  and hosid != ''"> and hosId = #{hosid}</if>
+            <if test="reductstatus != null "> and reductstatus = #{reductstatus}</if>
+            <if test="freemoney != null "> and freemoney = #{freemoney}</if>
+        </where>
+    </select>
+    
+    <select id="selectTReducttreatById" parameterType="Long" resultMap="TReducttreatResult">
+        <include refid="selectTReducttreatVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTReducttreat" parameterType="com.gxuwz.medical.domain.TReducttreat" useGeneratedKeys="true" keyProperty="id">
+        insert into t_reducttreat
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="chronicinfoid != null  and chronicinfoid != ''">chronicInfoId,</if>
+            <if test="treattime != null  and treattime != ''">treattime,</if>
+            <if test="money != null ">money,</if>
+            <if test="hosid != null  and hosid != ''">hosId,</if>
+            <if test="reductstatus != null ">reductstatus,</if>
+            <if test="freemoney != null ">freemoney,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="chronicinfoid != null  and chronicinfoid != ''">#{chronicinfoid},</if>
+            <if test="treattime != null  and treattime != ''">#{treattime},</if>
+            <if test="money != null ">#{money},</if>
+            <if test="hosid != null  and hosid != ''">#{hosid},</if>
+            <if test="reductstatus != null ">#{reductstatus},</if>
+            <if test="freemoney != null ">#{freemoney},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTReducttreat" parameterType="com.gxuwz.medical.domain.TReducttreat">
+        update t_reducttreat
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="chronicinfoid != null  and chronicinfoid != ''">chronicInfoId = #{chronicinfoid},</if>
+            <if test="treattime != null  and treattime != ''">treattime = #{treattime},</if>
+            <if test="money != null ">money = #{money},</if>
+            <if test="hosid != null  and hosid != ''">hosId = #{hosid},</if>
+            <if test="reductstatus != null ">reductstatus = #{reductstatus},</if>
+            <if test="freemoney != null ">freemoney = #{freemoney},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTReducttreatById" parameterType="Long">
+        delete from t_reducttreat where id = #{id}
+    </delete>
+
+    <delete id="deleteTReducttreatByIds" parameterType="String">
+        delete from t_reducttreat where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

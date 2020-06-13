@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head> <meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="keywords" content="">
+	<meta name="description" content="">
+	<title>人列表</title>
+	<link rel="shortcut icon" href="favicon.ico">
+	<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+	<link th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
+	<!-- bootstrap-table 表格插件样式 -->
+	<link th:href="@{/ajax/libs/bootstrap-table/bootstrap-table.min.css}" rel="stylesheet"/>
+	<link th:href="@{/css/animate.css}" rel="stylesheet"/>
+	<link th:href="@{/css/style.css}" rel="stylesheet"/>
+	<link th:href="@{/ruoyi/css/ry-ui.css}" rel="stylesheet"/>
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>家庭编号：</label>
+                                <input type="text" name="famicode"/>
+                            </li>
+                            <li>
+                                <label>农合证号：</label>
+                                <input type="text" name="ruralCard"/>
+                            </li>
+                            <li>
+                                <label>医疗证号：</label>
+                                <input type="text" name="mediCard"/>
+                            </li>
+                            <li>
+                                <label>户内编号：</label>
+                                <input type="text" name="houseNum"/>
+                            </li>
+                            <li>
+                                <label>名字：</label>
+                                <input type="text" name="persname"/>
+                            </li>
+
+                            <li>
+                                <label>身份证：</label>
+                                <input type="text" name="cardId"/>
+                            </li>
+
+                            <li>
+                                <label>是否农村户口：</label>
+                                <input type="text" name="isRural"/>
+                            </li>
+                            <li>
+                                <label>电话：</label>
+                                <input type="text" name="telephone"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+
+
+                    <a class="btn btn-success" onclick="$.operate.add()" >
+                        <i class="fa fa-plus"></i> 添加
+                    </a>
+
+
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" >
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" >
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" >
+                    <i class="fa fa-download"></i> 导出
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <script th:src="@{/js/jquery.min.js}"></script>
+	<script th:src="@{/js/bootstrap.min.js}"></script>
+	<!-- bootstrap-table 表格插件 -->
+	<script th:src="@{/ajax/libs/bootstrap-table/bootstrap-table.min.js}"></script>
+	<script th:src="@{/ajax/libs/bootstrap-table/locale/bootstrap-table-zh-CN.min.js}"></script>
+	<script th:src="@{/ajax/libs/bootstrap-table/extensions/mobile/bootstrap-table-mobile.js}"></script>
+	<script th:src="@{/ajax/libs/bootstrap-table/extensions/toolbar/bootstrap-table-toolbar.min.js}"></script>
+	<script th:src="@{/ajax/libs/bootstrap-table/extensions/columns/bootstrap-table-fixed-columns.js}"></script>
+	<!-- jquery-validate 表单验证插件 -->
+	<script th:src="@{/ajax/libs/validate/jquery.validate.min.js}"></script>
+	<script th:src="@{/ajax/libs/validate/messages_zh.min.js}"></script>
+	<script th:src="@{/ajax/libs/validate/jquery.validate.extend.js}"></script>
+	<!-- jquery-validate 表单树插件 -->
+	<script th:src="@{/ajax/libs/bootstrap-treetable/bootstrap-treetable.js}"></script>
+	<!-- jquery-export 表格导出插件 -->
+	<script th:src="@{/ajax/libs/bootstrap-table/extensions/export/bootstrap-table-export.js}"></script>
+	<script th:src="@{/ajax/libs/bootstrap-table/extensions/export/tableExport.js}"></script>
+	<!-- 遮罩层 -->
+	<script th:src="@{/ajax/libs/blockUI/jquery.blockUI.js}"></script>
+	<script th:src="@{/ajax/libs/iCheck/icheck.min.js}"></script>
+	<script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
+	<script th:src="@{/ajax/libs/layui/layui.js}"></script>
+	<script th:src="@{/ruoyi/js/common.js?v=4.1.0}"></script>
+	<script th:src="@{/ruoyi/js/ry-ui.js?v=4.1.0}"></script>
+	<script> var ctx = "\/"; </script>
+    <script th:inline="javascript">
+
+        var prefix = ctx + "medical/person";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                addPersonUrl: prefix + "/addPerson/{id}",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "人",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'perscode', 
+                    title: '档案编号',
+                    visible: true
+                },
+                {
+                    field: 'famicode', 
+                    title: '家庭编号'
+                },
+                {
+                    field: 'ruralCard', 
+                    title: '农合证号'
+                },
+                {
+                    field: 'mediCard', 
+                    title: '医疗证号'
+                },
+                {
+                    field: 'houseNum', 
+                    title: '户内编号'
+                },
+                {
+                    field: 'persname', 
+                    title: '名字'
+                },
+                {
+                    field: 'relation', 
+                    title: '与户主关系',
+                    width: '5%',
+                    align: "left",
+                    formatter: function(value, item, index) {
+                        if (item.relation == '0') {
+                            return '<span class="label label-success">户主</span>';
+                        }
+                        else if (item.relation == '1') {
+                            return '<span class="label label-primary">父子</span>';
+                        }else if (item.relation == '2') {
+                            return '<span class="label label-primary">母子</span>';
+                        }else if (item.relation == '3') {
+                            return '<span class="label label-primary">父女</span>';
+                        }else if (item.relation == '4') {
+                            return '<span class="label label-primary">母女</span>';
+                        }
+                    }
+                },
+                {
+                    field: 'cardId', 
+                    title: '身份证'
+                },
+                {
+                    field: 'sex', 
+                    title: '性别',
+                    width: '5%',
+                    align: "left",
+                    formatter: function(value, item, index) {
+                        if (item.sex == '0') {
+                            return '<span class="label label-success">男</span>';
+                        }
+                        else if (item.sex == '1') {
+                            return '<span class="label label-primary">女</span>';
+                        }
+                    }
+                },
+                {
+                    field: 'stateHealth', 
+                    title: '健康状况',
+                    width: '5%',
+                    align: "left",
+                    formatter: function(value, item, index) {
+                        if (item.stateHealth == '0') {
+                            return '<span class="label label-success">好</span>';
+                        }
+                        else if (item.stateHealth == '1') {
+                            return '<span class="label label-primary">一般</span>';
+                        }else if (item.stateHealth == '2') {
+                            return '<span class="label label-primary">差</span>';
+                        }else if (item.stateHealth == '3') {
+                            return '<span class="label label-primary">疾病</span>';
+                        }
+                    }
+                },
+                {
+                    field: 'birthday', 
+                    title: '出生日期'
+                },
+                {
+                    field: 'isRural', 
+                    title: '是否农村户口',
+                    width: '5%',
+                    align: "left",
+                    formatter: function(value, item, index) {
+                        if (item.isRural == '0') {
+                            return '<span class="label label-success">是</span>';
+                        }
+                        else if (item.isRural == '1') {
+                            return '<span class="label label-primary">否</span>';
+                        }
+                    }
+                },
+                {
+                    field: 'occupation', 
+                    title: '职业类型'
+                },
+                {
+                    field: 'telephone', 
+                    title: '电话'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        if (row.relation == '0') {
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="addPerson(\'' + row.famicode + '\')"><i class="fa fa-edit"></i>添加</a> ');
+                        }
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.perscode + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.perscode + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+
+        function addPerson(id) {
+            table.set();
+            if($.common.isEmpty(id) && table.options.type == table_type.bootstrapTreeTable) {
+                var row = $("#" + table.options.id).bootstrapTreeTable('getSelections')[0];
+                if ($.common.isEmpty(row)) {
+                    $.modal.alertWarning("请至少选择一条记录");
+                    return;
+                }
+                var url = table.options.addPersonUrl.replace("{id}", row[table.options.uniqueId]);
+                $.modal.open("添加" + table.options.modalName, url);
+            } else {
+                $.modal.open("添加" + table.options.modalName, addUrl(id));
+            }
+        }
+
+        function addUrl(id) {
+            var url = "/404.html";
+            if ($.common.isNotEmpty(id)) {
+                url = table.options.addPersonUrl.replace("{id}", id);
+            } else {
+                var id = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
+                if (id.length == 0) {
+                    $.modal.alertWarning("请至少选择一条记录");
+                    return;
+                }
+                url = table.options.addPersonUrl.replace("{id}", id);
+            }
+            return url;
+        }
+    </script>
+</body>
+</html>

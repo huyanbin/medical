@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <title>按行政区统计</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
+    <!-- bootstrap-table 表格插件样式 -->
+    <link th:href="@{/ajax/libs/bootstrap-table/bootstrap-table.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/animate.css}" rel="stylesheet"/>
+    <link th:href="@{/css/style.css}" rel="stylesheet"/>
+    <link th:href="@{/ruoyi/css/ry-ui.css}" rel="stylesheet"/>
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>行政区：</label>
+                                <input type="text" name="diseaseName"/>
+                            </li>
+
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <!--<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="medical:reimburse:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>-->
+                <!--<a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="medical:reimburse:edit">
+                    <i class="fa fa-edit"></i> 报销
+                </a>-->
+                <!--<a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="medical:reimburse:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>-->
+
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+     <script th:src="@{/js/jquery.min.js}"></script>
+     <script th:src="@{/js/bootstrap.min.js}"></script>
+     <!-- bootstrap-table 表格插件 -->
+     <script th:src="@{/ajax/libs/bootstrap-table/bootstrap-table.min.js}"></script>
+     <script th:src="@{/ajax/libs/bootstrap-table/locale/bootstrap-table-zh-CN.min.js}"></script>
+     <script th:src="@{/ajax/libs/bootstrap-table/extensions/mobile/bootstrap-table-mobile.js}"></script>
+     <script th:src="@{/ajax/libs/bootstrap-table/extensions/toolbar/bootstrap-table-toolbar.min.js}"></script>
+     <script th:src="@{/ajax/libs/bootstrap-table/extensions/columns/bootstrap-table-fixed-columns.js}"></script>
+     <!-- jquery-validate 表单验证插件 -->
+     <script th:src="@{/ajax/libs/validate/jquery.validate.min.js}"></script>
+     <script th:src="@{/ajax/libs/validate/messages_zh.min.js}"></script>
+     <script th:src="@{/ajax/libs/validate/jquery.validate.extend.js}"></script>
+     <!-- jquery-validate 表单树插件 -->
+     <script th:src="@{/ajax/libs/bootstrap-treetable/bootstrap-treetable.js}"></script>
+     <!-- jquery-export 表格导出插件 -->
+     <script th:src="@{/ajax/libs/bootstrap-table/extensions/export/bootstrap-table-export.js}"></script>
+     <script th:src="@{/ajax/libs/bootstrap-table/extensions/export/tableExport.js}"></script>
+     <!-- 遮罩层 -->
+     <script th:src="@{/ajax/libs/blockUI/jquery.blockUI.js}"></script>
+     <script th:src="@{/ajax/libs/iCheck/icheck.min.js}"></script>
+     <script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
+     <script th:src="@{/ajax/libs/layui/layui.js}"></script>
+     <script th:src="@{/ruoyi/js/common.js?v=4.1.0}"></script>
+     <script th:src="@{/ruoyi/js/ry-ui.js?v=4.1.0}"></script>
+     <script> var ctx = "\/"; </script>
+
+     <script th:inline="javascript">
+
+        var prefix = ctx + "medical/reimburse";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "报销",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'reiNo', 
+                    title: '报销单号'
+                },
+                {
+                    field: 'idCard', 
+                    title: '身份证'
+                },
+                {
+                    field: 'chroNo', 
+                    title: '农合编号'
+                },
+                {
+                    field: 'reiAlre', 
+                    title: '已报销金额'
+                },
+                {
+                    field: 'reiNow', 
+                    title: '本次报销金额'
+                },
+                {
+                    field: 'reiRema', 
+                    title: '可报销金额'
+                },
+                {
+                    field: 'creaTime', 
+                    title: '创建时间'
+                },
+                {
+                    field: 'diseaseName', 
+                    title: '疾病名称'
+                },
+                {
+                    field: 'cost', 
+                    title: '医疗总费'
+                },
+                {
+                    field: 'invoice', 
+                    title: '发票号'
+                },
+                {
+                    field: 'treaTime', 
+                    title: '就诊时间'
+                },
+                {
+                    field: 'creator', 
+                    title: '创建者'
+                },
+                 {
+                    field: "status",
+                    title: "报销状态",
+                     width: '5%',
+                     align: "left",
+                     formatter: function(value, item, index) {
+                         if (item.status == '0') {
+                             return '<span class="label label-success">待报销</span>';
+                         }
+                         else if (item.status == '1') {
+                             return '<span class="label label-primary">已报销</span>';
+                         }
+                     }
+                 },
+                /*{
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.reiNo + '\')"><i class="fa fa-edit"></i>申报</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="removes(\'' + row.reiNo + '\')"><i class="fa fa-remove"></i>报销</a>');
+                        return actions.join('');
+                    }
+                }*/]
+            };
+            $.table.init(options);
+        });
+
+        function removes(id) {
+            table.set();
+            $.modal.confirm("确定报销该条" + table.options.modalName + "信息吗？", function() {
+                var url = $.common.isEmpty(id) ? table.options.removeUrl : table.options.removeUrl.replace("{id}", id);
+                if(table.options.type == table_type.bootstrapTreeTable) {
+                    $.operate.get(url);
+                } else {
+                    var data = { "ids": id };
+                    $.operate.submit(url, "post", "json", data);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gxuwz.medical.mapper.TFamilyMapper">
+    
+    <resultMap type="com.gxuwz.medical.domain.TFamily" id="TFamilyResult">
+        <result property="famicode"    column="famicode"    />
+        <result property="countyNumber"    column="county_number"    />
+        <result property="townshipNumber"    column="township_number"    />
+        <result property="villageNumber"    column="village_number"    />
+        <result property="houseAttributes"    column="house_attributes"    />
+        <result property="houseName"    column="house_name"    />
+        <result property="familyPopu"    column="family_popu"    />
+        <result property="agrinum"    column="agriNum"    />
+        <result property="address"    column="address"    />
+        <result property="creattime"    column="creattime"    />
+        <result property="creator"    column="creator"    />
+    </resultMap>
+
+    <sql id="selectTFamilyVo">
+        select famicode, county_number, township_number, village_number, house_attributes, house_name, family_popu, agriNum, address, creattime, creator from t_family
+    </sql>
+
+    <select id="selectTFamilyList" parameterType="com.gxuwz.medical.domain.TFamily" resultMap="TFamilyResult">
+        <include refid="selectTFamilyVo"/>
+        <where>  
+            <if test="countyNumber != null  and countyNumber != ''"> and county_number = #{countyNumber}</if>
+            <if test="townshipNumber != null  and townshipNumber != ''"> and township_number = #{townshipNumber}</if>
+            <if test="villageNumber != null  and villageNumber != ''"> and village_number = #{villageNumber}</if>
+            <if test="houseAttributes != null  and houseAttributes != ''"> and house_attributes = #{houseAttributes}</if>
+            <if test="houseName != null  and houseName != ''"> and house_name like concat('%', #{houseName}, '%')</if>
+            <if test="familyPopu != null "> and family_popu = #{familyPopu}</if>
+            <if test="agrinum != null "> and agriNum = #{agrinum}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="creattime != null "> and creattime = #{creattime}</if>
+            <if test="creator != null  and creator != ''"> and creator = #{creator}</if>
+        </where>
+    </select>
+    
+    <select id="selectTFamilyById" parameterType="String" resultMap="TFamilyResult">
+        <include refid="selectTFamilyVo"/>
+        where famicode = #{famicode}
+    </select>
+        
+    <insert id="insertTFamily" parameterType="com.gxuwz.medical.domain.TFamily">
+        insert into t_family
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="famicode != null  and famicode != ''">famicode,</if>
+            <if test="countyNumber != null  and countyNumber != ''">county_number,</if>
+            <if test="townshipNumber != null  and townshipNumber != ''">township_number,</if>
+            <if test="villageNumber != null  and villageNumber != ''">village_number,</if>
+            <if test="houseAttributes != null  and houseAttributes != ''">house_attributes,</if>
+            <if test="houseName != null  and houseName != ''">house_name,</if>
+            <if test="familyPopu != null ">family_popu,</if>
+            <if test="agrinum != null ">agriNum,</if>
+            <if test="address != null  and address != ''">address,</if>
+            <if test="creattime != null ">creattime,</if>
+            <if test="creator != null  and creator != ''">creator,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="famicode != null  and famicode != ''">#{famicode},</if>
+            <if test="countyNumber != null  and countyNumber != ''">#{countyNumber},</if>
+            <if test="townshipNumber != null  and townshipNumber != ''">#{townshipNumber},</if>
+            <if test="villageNumber != null  and villageNumber != ''">#{villageNumber},</if>
+            <if test="houseAttributes != null  and houseAttributes != ''">#{houseAttributes},</if>
+            <if test="houseName != null  and houseName != ''">#{houseName},</if>
+            <if test="familyPopu != null ">#{familyPopu},</if>
+            <if test="agrinum != null ">#{agrinum},</if>
+            <if test="address != null  and address != ''">#{address},</if>
+            <if test="creattime != null ">#{creattime},</if>
+            <if test="creator != null  and creator != ''">#{creator},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTFamily" parameterType="com.gxuwz.medical.domain.TFamily">
+        update t_family
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="countyNumber != null  and countyNumber != ''">county_number = #{countyNumber},</if>
+            <if test="townshipNumber != null  and townshipNumber != ''">township_number = #{townshipNumber},</if>
+            <if test="villageNumber != null  and villageNumber != ''">village_number = #{villageNumber},</if>
+            <if test="houseAttributes != null  and houseAttributes != ''">house_attributes = #{houseAttributes},</if>
+            <if test="houseName != null  and houseName != ''">house_name = #{houseName},</if>
+            <if test="familyPopu != null ">family_popu = #{familyPopu},</if>
+            <if test="agrinum != null ">agriNum = #{agrinum},</if>
+            <if test="address != null  and address != ''">address = #{address},</if>
+            <if test="creattime != null ">creattime = #{creattime},</if>
+            <if test="creator != null  and creator != ''">creator = #{creator},</if>
+        </trim>
+        where famicode = #{famicode}
+    </update>
+
+    <delete id="deleteTFamilyById" parameterType="String">
+        delete from t_family where famicode = #{famicode}
+    </delete>
+
+    <delete id="deleteTFamilyByIds" parameterType="String">
+        delete from t_family where famicode in 
+        <foreach item="famicode" collection="array" open="(" separator="," close=")">
+            #{famicode}
+        </foreach>
+    </delete>
+    
+</mapper>

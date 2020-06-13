@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gxuwz.medical.mapper.TPaymentMapper">
+    
+    <resultMap type="com.gxuwz.medical.domain.TPayment" id="TPaymentResult">
+        <result property="payno"    column="payNo"    />
+        <result property="perscode"    column="perscode"    />
+        <result property="paycost"    column="payCost"    />
+        <result property="runyear"    column="runyear"    />
+        <result property="paytime"    column="payTime"    />
+        <result property="creator"    column="creator"    />
+        <result property="famicode"    column="famicode"    />
+    </resultMap>
+
+    <sql id="selectTPaymentVo">
+        select payNo, perscode, payCost, runyear, payTime, creator, famicode from t_payment
+    </sql>
+
+    <select id="selectTPaymentList" parameterType="com.gxuwz.medical.domain.TPayment" resultMap="TPaymentResult">
+        <include refid="selectTPaymentVo"/>
+        <where>  
+            <if test="perscode != null  and perscode != ''"> and perscode = #{perscode}</if>
+            <if test="paycost != null "> and payCost = #{paycost}</if>
+            <if test="runyear != null "> and runyear = #{runyear}</if>
+            <if test="paytime != null "> and payTime = #{paytime}</if>
+            <if test="creator != null  and creator != ''"> and creator = #{creator}</if>
+            <if test="famicode != null  and famicode != ''"> and famicode = #{famicode}</if>
+        </where>
+    </select>
+    
+    <select id="selectTPaymentById" parameterType="Long" resultMap="TPaymentResult">
+        <include refid="selectTPaymentVo"/>
+        where payNo = #{payno}
+    </select>
+        
+    <insert id="insertTPayment" parameterType="com.gxuwz.medical.domain.TPayment" useGeneratedKeys="true" keyProperty="payno">
+        insert into t_payment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="perscode != null  and perscode != ''">perscode,</if>
+            <if test="paycost != null ">payCost,</if>
+            <if test="runyear != null ">runyear,</if>
+            <if test="paytime != null ">payTime,</if>
+            <if test="creator != null  and creator != ''">creator,</if>
+            <if test="famicode != null  and famicode != ''">famicode,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="perscode != null  and perscode != ''">#{perscode},</if>
+            <if test="paycost != null ">#{paycost},</if>
+            <if test="runyear != null ">#{runyear},</if>
+            <if test="paytime != null ">#{paytime},</if>
+            <if test="creator != null  and creator != ''">#{creator},</if>
+            <if test="famicode != null  and famicode != ''">#{famicode},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTPayment" parameterType="com.gxuwz.medical.domain.TPayment">
+        update t_payment
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="perscode != null  and perscode != ''">perscode = #{perscode},</if>
+            <if test="paycost != null ">payCost = #{paycost},</if>
+            <if test="runyear != null ">runyear = #{runyear},</if>
+            <if test="paytime != null ">payTime = #{paytime},</if>
+            <if test="creator != null  and creator != ''">creator = #{creator},</if>
+            <if test="famicode != null  and famicode != ''">famicode = #{famicode},</if>
+        </trim>
+        where payNo = #{payno}
+    </update>
+
+    <delete id="deleteTPaymentById" parameterType="Long">
+        delete from t_payment where payNo = #{payno}
+    </delete>
+
+    <delete id="deleteTPaymentByIds" parameterType="String">
+        delete from t_payment where payNo in 
+        <foreach item="payno" collection="array" open="(" separator="," close=")">
+            #{payno}
+        </foreach>
+    </delete>
+    
+</mapper>

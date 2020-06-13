@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gxuwz.medical.mapper.S201Mapper">
+    
+    <resultMap type="com.gxuwz.medical.domain.S201" id="S201Result">
+        <result property="id"    column="id"    />
+        <result property="itemcode"    column="itemcode"    />
+        <result property="itemname"    column="itemname"    />
+        <result property="pitemcode"    column="pitemcode"    />
+        <result property="type"    column="type"    />
+    </resultMap>
+
+    <sql id="selectS201Vo">
+        select id, itemcode, itemname, pitemcode, type from s201
+    </sql>
+
+    <select id="selectS201List" parameterType="com.gxuwz.medical.domain.S201" resultMap="S201Result">
+        <include refid="selectS201Vo"/>
+        <where>  
+            <if test="itemcode != null  and itemcode != ''"> and itemcode = #{itemcode}</if>
+            <if test="itemname != null  and itemname != ''"> and itemname like concat('%', #{itemname}, '%')</if>
+            <if test="pitemcode != null  and pitemcode != ''"> and pitemcode = #{pitemcode}</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+        </where>
+    </select>
+    
+    <select id="selectS201ById" parameterType="Long" resultMap="S201Result">
+        <include refid="selectS201Vo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertS201" parameterType="com.gxuwz.medical.domain.S201" useGeneratedKeys="true" keyProperty="id">
+        insert into s201
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="itemcode != null  and itemcode != ''">itemcode,</if>
+            <if test="itemname != null  and itemname != ''">itemname,</if>
+            <if test="pitemcode != null  and pitemcode != ''">pitemcode,</if>
+            <if test="type != null  and type != ''">type,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="itemcode != null  and itemcode != ''">#{itemcode},</if>
+            <if test="itemname != null  and itemname != ''">#{itemname},</if>
+            <if test="pitemcode != null  and pitemcode != ''">#{pitemcode},</if>
+            <if test="type != null  and type != ''">#{type},</if>
+         </trim>
+    </insert>
+
+    <update id="updateS201" parameterType="com.gxuwz.medical.domain.S201">
+        update s201
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="itemcode != null  and itemcode != ''">itemcode = #{itemcode},</if>
+            <if test="itemname != null  and itemname != ''">itemname = #{itemname},</if>
+            <if test="pitemcode != null  and pitemcode != ''">pitemcode = #{pitemcode},</if>
+            <if test="type != null  and type != ''">type = #{type},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteS201ById" parameterType="Long">
+        delete from s201 where id = #{id}
+    </delete>
+
+    <delete id="deleteS201ByIds" parameterType="String">
+        delete from s201 where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

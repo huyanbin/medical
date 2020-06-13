@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gxuwz.medical.mapper.TRecordfreeMapper">
+    
+    <resultMap type="com.gxuwz.medical.domain.TRecordfree" id="TRecordfreeResult">
+        <result property="perscode"    column="perscode"    />
+        <result property="freetotal"    column="freetotal"    />
+    </resultMap>
+
+    <sql id="selectTRecordfreeVo">
+        select perscode, freetotal from t_recordfree
+    </sql>
+
+    <select id="selectTRecordfreeList" parameterType="com.gxuwz.medical.domain.TRecordfree" resultMap="TRecordfreeResult">
+        <include refid="selectTRecordfreeVo"/>
+        <where>  
+            <if test="freetotal != null "> and freetotal = #{freetotal}</if>
+        </where>
+    </select>
+    
+    <select id="selectTRecordfreeById" parameterType="String" resultMap="TRecordfreeResult">
+        <include refid="selectTRecordfreeVo"/>
+        where perscode = #{perscode}
+    </select>
+        
+    <insert id="insertTRecordfree" parameterType="com.gxuwz.medical.domain.TRecordfree">
+        insert into t_recordfree
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="perscode != null  and perscode != ''">perscode,</if>
+            <if test="freetotal != null ">freetotal,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="perscode != null  and perscode != ''">#{perscode},</if>
+            <if test="freetotal != null ">#{freetotal},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTRecordfree" parameterType="com.gxuwz.medical.domain.TRecordfree">
+        update t_recordfree
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="freetotal != null ">freetotal = #{freetotal},</if>
+        </trim>
+        where perscode = #{perscode}
+    </update>
+
+    <delete id="deleteTRecordfreeById" parameterType="String">
+        delete from t_recordfree where perscode = #{perscode}
+    </delete>
+
+    <delete id="deleteTRecordfreeByIds" parameterType="String">
+        delete from t_recordfree where perscode in 
+        <foreach item="perscode" collection="array" open="(" separator="," close=")">
+            #{perscode}
+        </foreach>
+    </delete>
+    
+</mapper>

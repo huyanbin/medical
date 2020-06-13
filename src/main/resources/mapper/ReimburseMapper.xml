@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gxuwz.medical.mapper.ReimburseMapper">
+    
+    <resultMap type="com.gxuwz.medical.domain.Reimburse" id="ReimburseResult">
+        <result property="reiNo"    column="rei_no"    />
+        <result property="idCard"    column="id_card"    />
+        <result property="chroNo"    column="chro_no"    />
+        <result property="reiAlre"    column="rei_alre"    />
+        <result property="reiNow"    column="rei_now"    />
+        <result property="reiRema"    column="rei_rema"    />
+        <result property="creaTime"    column="crea_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="diseaseName"    column="disease_name"    />
+        <result property="cost"    column="cost"    />
+        <result property="invoice"    column="invoice"    />
+        <result property="treaTime"    column="trea_time"    />
+        <result property="creator"    column="creator"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectReimburseVo">
+        select rei_no, id_card, chro_no, rei_alre, rei_now, rei_rema, crea_time, update_time, disease_name, cost, invoice, trea_time, creator, status from reimburse
+    </sql>
+
+    <select id="selectReimburseList" parameterType="com.gxuwz.medical.domain.Reimburse" resultMap="ReimburseResult">
+        <include refid="selectReimburseVo"/>
+        <where>  
+            <if test="reiNo != null  and reiNo != ''"> and rei_no = #{reiNo}</if>
+            <if test="idCard != null  and idCard != ''"> and id_card = #{idCard}</if>
+            <if test="chroNo != null  and chroNo != ''"> and chro_no = #{chroNo}</if>
+            <if test="reiAlre != null "> and rei_alre = #{reiAlre}</if>
+            <if test="reiNow != null "> and rei_now = #{reiNow}</if>
+            <if test="reiRema != null  and reiRema != ''"> and rei_rema = #{reiRema}</if>
+            <if test="creaTime != null "> and crea_time = #{creaTime}</if>
+            <if test="diseaseName != null  and diseaseName != ''"> and disease_name like concat('%', #{diseaseName}, '%')</if>
+            <if test="cost != null "> and cost = #{cost}</if>
+            <if test="invoice != null  and invoice != ''"> and invoice = #{invoice}</if>
+            <if test="treaTime != null "> and trea_time = #{treaTime}</if>
+            <if test="creator != null  and creator != ''"> and creator = #{creator}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectReimburseById" parameterType="String" resultMap="ReimburseResult">
+        <include refid="selectReimburseVo"/>
+        where rei_no = #{reiNo}
+    </select>
+        
+    <insert id="insertReimburse" parameterType="com.gxuwz.medical.domain.Reimburse">
+        insert into reimburse
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="reiNo != null  and reiNo != ''">rei_no,</if>
+            <if test="idCard != null  and idCard != ''">id_card,</if>
+            <if test="chroNo != null  and chroNo != ''">chro_no,</if>
+            <if test="reiAlre != null ">rei_alre,</if>
+            <if test="reiNow != null ">rei_now,</if>
+            <if test="reiRema != null  and reiRema != ''">rei_rema,</if>
+            <if test="creaTime != null ">crea_time,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="diseaseName != null  and diseaseName != ''">disease_name,</if>
+            <if test="cost != null ">cost,</if>
+            <if test="invoice != null  and invoice != ''">invoice,</if>
+            <if test="treaTime != null ">trea_time,</if>
+            <if test="creator != null  and creator != ''">creator,</if>
+            <if test="status != null  and status != ''"> status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="reiNo != null  and reiNo != ''">#{reiNo},</if>
+            <if test="idCard != null  and idCard != ''">#{idCard},</if>
+            <if test="chroNo != null  and chroNo != ''">#{chroNo},</if>
+            <if test="reiAlre != null ">#{reiAlre},</if>
+            <if test="reiNow != null ">#{reiNow},</if>
+            <if test="reiRema != null  and reiRema != ''">#{reiRema},</if>
+            <if test="creaTime != null ">#{creaTime},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="diseaseName != null  and diseaseName != ''">#{diseaseName},</if>
+            <if test="cost != null ">#{cost},</if>
+            <if test="invoice != null  and invoice != ''">#{invoice},</if>
+            <if test="treaTime != null ">#{treaTime},</if>
+            <if test="creator != null  and creator != ''">#{creator},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+         </trim>
+    </insert>
+
+    <update id="updateReimburse" parameterType="com.gxuwz.medical.domain.Reimburse">
+        update reimburse
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="idCard != null  and idCard != ''">id_card = #{idCard},</if>
+            <if test="chroNo != null  and chroNo != ''">chro_no = #{chroNo},</if>
+            <if test="reiAlre != null ">rei_alre = #{reiAlre},</if>
+            <if test="reiNow != null ">rei_now = #{reiNow},</if>
+            <if test="reiRema != null  and reiRema != ''">rei_rema = #{reiRema},</if>
+            <if test="creaTime != null ">crea_time = #{creaTime},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="diseaseName != null  and diseaseName != ''">disease_name = #{diseaseName},</if>
+            <if test="cost != null ">cost = #{cost},</if>
+            <if test="invoice != null  and invoice != ''">invoice = #{invoice},</if>
+            <if test="treaTime != null ">trea_time = #{treaTime},</if>
+            <if test="creator != null  and creator != ''">creator = #{creator},</if>
+            <if test="status != null  and status != ''"> status = #{status}</if>
+        </trim>
+        where rei_no = #{reiNo}
+    </update>
+
+    <delete id="deleteReimburseById" parameterType="String">
+        delete from reimburse where rei_no = #{reiNo}
+    </delete>
+
+    <delete id="deleteReimburseByIds" parameterType="String">
+        delete from reimburse where rei_no in 
+        <foreach item="reiNo" collection="array" open="(" separator="," close=")">
+            #{reiNo}
+        </foreach>
+    </delete>
+    
+</mapper>
