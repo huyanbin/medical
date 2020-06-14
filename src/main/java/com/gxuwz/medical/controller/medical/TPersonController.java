@@ -3,6 +3,7 @@ package com.gxuwz.medical.controller.medical;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.gxuwz.medical.controller.BaseController;
 import com.gxuwz.medical.controller.RedisUtil;
@@ -201,15 +202,15 @@ public class TPersonController extends BaseController
     @ResponseBody
     public TableDataInfo paymentList() {
 
-        String famicode = redisUtil.get("paymentFami").toString();
+        Object famicode = redisUtil.get("paymentFami");
         TPayment tp = new TPayment();
-        tp.setFamicode(famicode);
+        tp.setFamicode(famicode!=null?famicode.toString():null);
         //获取当前你年份，该家庭的全部成员
         tp.setRunyear(Long.parseLong(DateUtils.getCurrentYear()));
         List<TPayment> tPaymentList = itPaymentService.selectTPaymentList(tp);
         TPerson tPerson = new TPerson();
         List<TPerson> tPersonLists = new ArrayList<>();
-        tPerson.setFamicode(famicode);
+        tPerson.setFamicode(famicode!=null?famicode.toString():null);
         List<TPerson> tPersonList = tPersonService.selectTPersonList(tPerson);
         for (TPerson t : tPersonList) {
             for (TPayment tm : tPaymentList) {
@@ -221,7 +222,6 @@ public class TPersonController extends BaseController
         redisUtil.set("paymentNum",tPersonLists.size(), 60*5);
         return getDataTable(tPersonLists);
     }
-
 
     /**
      * 开始缴费

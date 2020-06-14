@@ -193,20 +193,6 @@
         function paymentAll() {
 			table.set();
 			var rows = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
-			/*if($.common.isEmpty(id) && table.options.type == table_type.bootstrapTreeTable) {
-				var row = $("#" + table.options.id).bootstrapTreeTable('getSelections')[0];
-				if ($.common.isEmpty(row)) {
-					$.modal.alertWarning("请至少选择一条记录");
-					return;
-				}
-				var url = table.options.paymentUrl.replace("{id}", row[table.options.uniqueId]);
-				$.modal.open("缴费", url);
-			} else {
-				//var data = { "ids": id };
-				var data = { "ids": rows.join() };
-				$.modal.open("缴费" , addUrl(data));
-			}*/
-
 			if (rows.length == 0) {
 				$.modal.alertWarning("请至少选择一条记录");
 				return;
@@ -232,18 +218,6 @@
 				//var data = { "ids": id };
 				$.modal.open("缴费" , addUrl(id));
 			}
-
-			/*table.set();
-			$.modal.confirm("确定删除该条" + table.options.modalName + "信息吗？", function() {
-				var url = $.common.isEmpty(id) ? table.options.paymentUrl : table.options.paymentUrl.replace("{id}", id);
-				if(table.options.type == table_type.bootstrapTreeTable) {
-					$.operate.get(url);
-				} else {
-					var data = { "ids": id };
-					//$.operate.submit(url, "post", "json", data);
-					$.operate.detail(data, 800, 800);
-				}
-			});*/
 		}
 
 
