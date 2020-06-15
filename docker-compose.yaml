@@ -1,0 +1,11 @@
+version: '2'
+services:
+  innovate-admin:
+    image: mikeyboom/medical:latest
+    privileged: true
+    ports:
+      - 8080:8080
+    volumes:
+      - /home/mikey/MIKEY/tmp/medical:/home/mikey/medical/uploadPath
+    environment:
+      - spring.profiles.active=prod

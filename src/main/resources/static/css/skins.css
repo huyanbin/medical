@@ -11,7 +11,7 @@
 
 .skin-blue .navbar-default .nav>li.selected>a,
 .skin-blue .navbar-default .nav>li.selected>a:focus {
-	background-color: #1890ff;
+	background-color: #0d8ddb;
     color: rgba(255,255,255,1);
 }
 
